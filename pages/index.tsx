@@ -1,8 +1,13 @@
+import { useEffect, useState } from 'react';
 import Head from 'next/head'
 import Image from 'next/image'
 import styles from '../styles/Home.module.css'
+import { useSession, signIn, signOut } from "next-auth/react"
 
 export default function Home() {
+
+  const { data: session } = useSession()
+
   return (
     <div className={styles.container}>
       <Head>
@@ -20,6 +25,27 @@ export default function Home() {
           Get started by editing{' '}
           <code className={styles.code}>pages/index.js</code>
         </p>
+
+        <p className={styles.description}>
+          {
+            session ?
+              (
+                <>
+                  Signed in as {session.user.email} <br />
+                  <button onClick={() => signOut()}>Sign out</button>
+                </>
+              )
+              :
+              (
+                <>
+                  Not signed in <br />
+                  <button onClick={() => signIn()}>Sign in</button>
+                </>
+              )
+          }
+        </p>
+
+
 
         <div className={styles.grid}>
           <a href="https://nextjs.org/docs" className={styles.card}>
